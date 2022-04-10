@@ -1,8 +1,18 @@
 <template>
 	<div class="card">
-		<div class="score">Score : {{ QuestionInfo.index - 1 }}</div>
+		<div v-if="score.score > 0" class="score">
+			<p>
+				Score : <span style="color: darkcyan; font-size: 1.5rem">{{ score.score }}</span>
+			</p>
+
+			<p>
+				Left
+				<span style="color: darkcyan; font-size: 1.5rem"> {{ countriesLen - index }}</span> flag
+				!
+			</p>
+		</div>
 		<div class="flag">
-			<img :src="QuestionInfo.img" alt="" />
+			<img :src="img" alt="" />
 		</div>
 		<div class="buttons">
 			<button @click="nextQuestion">{{ AnswersList[0] }}</button>
@@ -18,50 +28,96 @@
 
 	const axios = require('axios');
 	export default {
-		props: ['resetGame'],
 		data() {
 			return {
-				QuestionInfo: {
-					country: '',
-					index: 0,
-					img: '',
-					score: '',
-				},
+				country: '',
+				index: 0,
+				img: '',
 				AnswersList: ['', '', '', ''],
 				answer: '',
+				countriesLen: countries.length,
 			};
 		},
 		inject: ['isGameFinished', 'score'],
 
 		created() {
 			this.nextQuestion('');
+			this.score.score = 0;
 		},
 
 		methods: {
-			nextQuestion(e) {
-				if (e) {
-					if (!this.checkAnswer(e.target.outerText)) {
-						this.score.score = this.QuestionInfo.index - 1;
-						this.isGameFinished.finished = true;
+			nextQuestion(ClickedButton) {
+				if (this.index >= countries.length - 1) {
+					this.isGameFinished.finished = true;
+					return;
+				}
+				//first initilazied we dont have clicked button
+				//because of this call get data when start game
+				if (!ClickedButton) {
+					this.getData();
+					this.index++;
+				} else {
+					let buttons = document.querySelectorAll('button');
+					let btnText = ClickedButton.target.outerText;
+					//disabled buttons till next question
+					buttons.forEach((button) => {
+						button.disabled = true;
+					});
+					//if true make green button and wait for 1 sec
+					if (this.checkAnswer(btnText)) {
+						ClickedButton.target.classList.add('true');
+						setTimeout(() => {
+							if (this.index < countries.length - 1) {
+								this.getData();
+								this.score.score++;
+								this.index++;
+								//enable buttons after 3 sec
+								buttons.forEach((button) => {
+									button.classList.remove('true');
+									button.classList.remove('false');
+									button.disabled = false;
+								});
+							}
+						}, 800);
+					}
+					//if not true make red button and wait 2 sec
+					else {
+						ClickedButton.target.classList.add('false');
+						buttons.forEach((button) => {
+							if (button.outerText == this.country) {
+								button.classList.add('true');
+							}
+						});
+						setTimeout(() => {
+							if (this.index < countries.length - 1) {
+								this.getData();
+								this.index++;
+								//enable buttons after 3 sec
+								buttons.forEach((button) => {
+									button.classList.remove('true');
+									button.classList.remove('false');
+									button.disabled = false;
+								});
+							}
+						}, 1000);
 					}
 				}
-				if (this.QuestionInfo.index < countries.length - 1) {
-					this.getData();
-					this.QuestionInfo.index++;
-				}
 			},
+			// get data from api with axios then set variables for questions
 			getData() {
 				axios
-					.get(`https://restcountries.com/v3.1/name/${countries[this.QuestionInfo.index]}`)
+					.get(`https://restcountries.com/v3.1/name/${countries[this.index]}`)
 					.then((res) => {
-						this.QuestionInfo.country = res.data[0].name.common;
-						this.QuestionInfo.img = res.data[0].flags['png'];
+						this.country = res.data[0].name.common;
+						this.img = res.data[0].flags['png'];
 						this.setAnswers();
 					});
 			},
+			//set 1 correct answer from question info and
+			//3 random answers from countries list
 			setAnswers() {
 				let correctIndex = Math.floor(Math.random() * 4);
-				this.AnswersList[correctIndex] = this.QuestionInfo.country;
+				this.AnswersList[correctIndex] = this.country;
 				for (let i = 0; i < 4; i++) {
 					if (i != correctIndex) {
 						let answer = countries[Math.floor(Math.random() * 20)];
@@ -75,17 +131,19 @@
 					}
 				}
 			},
+			//check Answer if it is true or false
 			checkAnswer(answer) {
 				this.answer = answer;
 				if (this.answer) {
-					if (this.answer == this.QuestionInfo.country) {
+					if (this.answer == this.country) {
 						return true;
 					} else false;
 				}
 			},
+
 			// setVarForGame() {
 			// 	this.isGameFinished = false;
-			// 	this.QuestionInfo = {
+			// 	this.questionInfo = {
 			// 		country: '',
 			// 		index: 0,
 			// 		img: '',
@@ -97,52 +155,3 @@
 		},
 	};
 </script>
-<style scoped>
-	.card {
-		display: flex;
-		flex-direction: column;
-		background-color: rgba(228, 228, 228, 0.9);
-		padding: 50px 25px;
-		width: 30%;
-		text-align: center;
-		align-items: center;
-		height: 70vh;
-	}
-	.card .score {
-		width: 100px;
-		background: rgba(0, 0, 0, 0.3);
-		margin-bottom: 20px;
-	}
-	.buttons {
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-		justify-content: space-evenly;
-		align-items: center;
-	}
-	.buttons button {
-		background-color: rgb(83, 83, 83);
-		color: rgb(208, 208, 208);
-		width: 100%;
-		margin-top: 15px;
-		border-radius: 10px;
-		font-size: 20px;
-		padding: 5px 10px;
-		cursor: pointer;
-	}
-	.buttons button:hover {
-		background-color: rgb(212, 212, 212);
-		color: rgb(67, 67, 67);
-	}
-	.flag {
-		width: 25vw;
-		height: 35vh;
-		margin: auto;
-	}
-	.flag img {
-		width: 80%;
-		height: 100%;
-		margin: auto;
-		border-radius: 10px;
-	}
-</style>

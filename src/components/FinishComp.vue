@@ -2,7 +2,7 @@
 	<div class="card">
 		<h2>Congratulations ! {{ userName }}</h2>
 		<h2>
-			Your score <span style="color: red">{{ score.score }}</span>
+			Your score is <span style="color: red">{{ score.score }} / {{ countriesLen }}</span>
 		</h2>
 		//\\
 		<button @click="$emit('restart')">Play Again</button>
@@ -10,13 +10,14 @@
 </template>
 <script>
 	export default {
-		inject: ['score', 'userName'],
+		inject: ['score', 'userName', 'countriesLen'],
 	};
 </script>
 <style scoped>
 	.card {
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 		background-color: rgba(56, 56, 56, 0.97);
 		padding: 50px 25px;
 		width: 30%;

@@ -7,6 +7,8 @@
 	import QuestionComp from '@/components/QuestionComp.vue';
 	import StartPage from '@/components/StartPage.vue';
 	import FinishGame from './FinishComp.vue';
+	import countries from '../../country_names';
+
 	export default {
 		components: {
 			QuestionComp,
@@ -19,7 +21,8 @@
 				resetGame: { reset: false },
 				isGameFinished: { finished: false },
 				userName: '',
-				score: { score: '' },
+				score: { score: 0 },
+				countriesLen: countries.length,
 			};
 		},
 		methods: {
@@ -37,6 +40,7 @@
 				isGameFinished: this.isGameFinished,
 				score: this.score,
 				userName: this.userName,
+				countriesLen: this.countriesLen,
 			};
 		},
 	};

@@ -1,7 +1,6 @@
 const countries = [
 	'Turkey',
-	'USA',
-	'Afghanistan',
+	'United States',
 	'Azerbaijan',
 	'Brazil',
 	'Finland',
@@ -29,5 +28,6 @@ const countries = [
 	'Thailand',
 	'United Kingdom',
 	'Venezuela',
+	'Afghanistan',
 ];
 export default countries;

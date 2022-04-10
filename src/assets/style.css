@@ -20,10 +20,9 @@
 	padding: 20px;
 }
 .basla-btn {
-	height: 30px;
 	padding: 20px;
 	border-radius: 20px;
-	background: rebeccapurple;
+	background: white;
 	cursor: pointer;
 	display: flex;
 	align-items: center;
@@ -45,4 +44,87 @@
 }
 .input-name:focus {
 	border: 3px solid rgb(255, 254, 254);
+}
+.card {
+	display: flex;
+	flex-direction: column;
+	background-color: rgba(228, 228, 228, 0.9);
+	padding: 50px 25px;
+	width: 40%;
+	text-align: center;
+	align-items: center;
+	height: 70vh;
+}
+.card .score {
+	width: 250px;
+	background: rgba(0, 0, 0, 0.2);
+	margin-bottom: 20px;
+	display: flex;
+	justify-content: space-between;
+	font-size: 1.1rem;
+}
+.buttons {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	justify-content: space-evenly;
+	align-items: center;
+}
+.buttons button {
+	background-color: rgb(83, 83, 83);
+	color: rgb(208, 208, 208);
+	width: 30vw;
+	margin-top: 15px;
+	border-radius: 10px;
+	font-size: 20px;
+	padding: 5px 10px;
+	cursor: pointer;
+}
+
+.buttons button.true {
+	background-color: #7ebc89;
+	color: black;
+	transition: background-color 400ms linear, color 400ms linear;
+}
+.buttons button.false {
+	background-color: rgb(219, 44, 44);
+	color: black;
+	transition: background-color 400ms linear, color 400ms linear;
+}
+
+.flag {
+	width: 25vw;
+	height: 35vh;
+	margin: auto;
+}
+.flag img {
+	width: 80%;
+	height: 100%;
+	margin: auto;
+	border-radius: 10px;
+}
+@media only screen and (max-width: 600px) {
+	.card {
+		width: 70%;
+	}
+	.flag {
+		width: 70vw;
+		height: 35vh;
+	}
+	.buttons button {
+		padding: 10px;
+		width: 30vw;
+	}
+}
+@media screen and (max-width: 480px) {
+	#clockdiv {
+		font-size: 18px;
+	}
+	#clockdiv > div {
+		padding: 4px;
+	}
+	.smalltext {
+		padding-top: 2px;
+		font-size: 12px;
+	}
 }
