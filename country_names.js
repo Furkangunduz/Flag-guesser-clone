@@ -1,5 +1,5 @@
 const countries = [
-	'Turkiye',
+	'Turkey',
 	'USA',
 	'Afghanistan',
 	'Azerbaijan',

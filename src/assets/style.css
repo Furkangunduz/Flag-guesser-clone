@@ -10,20 +10,20 @@
 	justify-content: center;
 }
 .start-page {
-	width: 20%;
-	height: 50%;
-	background: rgba(108, 106, 255, 0.8);
+	width: 35%;
+	height: 30%;
+	background-color: rgba(56, 56, 56, 0.97);
 	border-radius: 20px;
 	display: flex;
 	align-items: center;
 	justify-content: space-evenly;
-	flex-direction: column;
+	padding: 20px;
 }
 .basla-btn {
 	height: 30px;
 	padding: 20px;
 	border-radius: 20px;
-	background: rgba(255, 255, 255, 0.8);
+	background: rebeccapurple;
 	cursor: pointer;
 	display: flex;
 	align-items: center;
