@@ -15,10 +15,10 @@
 			<img :src="img" alt="" />
 		</div>
 		<div class="buttons">
-			<button @click="nextQuestion">{{ AnswersList[0] }}</button>
-			<button @click="nextQuestion">{{ AnswersList[1] }}</button>
-			<button @click="nextQuestion">{{ AnswersList[2] }}</button>
-			<button @click="nextQuestion">{{ AnswersList[3] }}</button>
+			<button @click="choose">{{ AnswersList[0] }}</button>
+			<button @click="choose">{{ AnswersList[1] }}</button>
+			<button @click="choose">{{ AnswersList[2] }}</button>
+			<button @click="choose">{{ AnswersList[3] }}</button>
 		</div>
 	</div>
 </template>
@@ -41,11 +41,14 @@
 		inject: ['isGameFinished', 'score'],
 
 		created() {
-			this.nextQuestion('');
+			this.nextQuestion();
 			this.score.score = 0;
 		},
 
 		methods: {
+			choose(ClickedButton) {
+				this.nextQuestion(ClickedButton);
+			},
 			nextQuestion(ClickedButton) {
 				if (this.index >= countries.length - 1) {
 					this.isGameFinished.finished = true;
@@ -65,11 +68,11 @@
 					});
 					//if true make green button and wait for 1 sec
 					if (this.checkAnswer(btnText)) {
+						this.score.score++;
 						ClickedButton.target.classList.add('true');
 						setTimeout(() => {
 							if (this.index < countries.length - 1) {
 								this.getData();
-								this.score.score++;
 								this.index++;
 								//enable buttons after 3 sec
 								buttons.forEach((button) => {
