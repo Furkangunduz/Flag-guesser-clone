@@ -18,6 +18,7 @@
 
 	const axios = require('axios');
 	export default {
+		props: ['resetGame'],
 		data() {
 			return {
 				QuestionInfo: {
@@ -35,6 +36,7 @@
 		created() {
 			this.nextQuestion('');
 		},
+
 		methods: {
 			nextQuestion(e) {
 				if (e) {
@@ -54,20 +56,18 @@
 					.then((res) => {
 						this.QuestionInfo.country = res.data[0].name.common;
 						this.QuestionInfo.img = res.data[0].flags['png'];
-						console.log(res.data[0].flags['png']);
 						this.setAnswers();
 					});
 			},
 			setAnswers() {
 				let correctIndex = Math.floor(Math.random() * 4);
 				this.AnswersList[correctIndex] = this.QuestionInfo.country;
-				console.log(correctIndex);
 				for (let i = 0; i < 4; i++) {
 					if (i != correctIndex) {
-						let answer = countries[Math.floor(Math.random() * 10)];
+						let answer = countries[Math.floor(Math.random() * 20)];
 						if (!this.AnswersList.some((i) => i == answer)) this.AnswersList[i] = answer;
 						else {
-							let answer = countries[Math.floor(Math.random() * 10)];
+							let answer = countries[Math.floor(Math.random() * 20)];
 							while (!this.AnswersList.some((i) => i == answer)) {
 								this.AnswersList[i] = answer;
 							}
@@ -76,7 +76,6 @@
 				}
 			},
 			checkAnswer(answer) {
-				console.log(answer);
 				this.answer = answer;
 				if (this.answer) {
 					if (this.answer == this.QuestionInfo.country) {
@@ -84,16 +83,17 @@
 					} else false;
 				}
 			},
-			resetData() {
-				this.isGameFinished = false;
-				this.QuestionInfo = {
-					country: '',
-					index: 0,
-					img: '',
-					score: '',
-				};
-				this.AnswersList = ['', '', '', ''];
-			},
+			// setVarForGame() {
+			// 	this.isGameFinished = false;
+			// 	this.QuestionInfo = {
+			// 		country: '',
+			// 		index: 0,
+			// 		img: '',
+			// 		score: '',
+			// 	};
+			// 	this.AnswersList = ['', '', '', ''];
+			// 	this.nextQuestion();
+			// },
 		},
 	};
 </script>
@@ -101,32 +101,33 @@
 	.card {
 		display: flex;
 		flex-direction: column;
-		background-color: rgba(255, 255, 255, 0.8);
+		background-color: rgba(228, 228, 228, 0.9);
 		padding: 50px 25px;
 		width: 30%;
 		text-align: center;
+		align-items: center;
+		height: 70vh;
 	}
 	.card .score {
-		background: rgba(0, 0, 0, 0.2);
+		width: 100px;
+		background: rgba(0, 0, 0, 0.3);
 		margin-bottom: 20px;
-		display: inline;
 	}
 	.buttons {
 		display: flex;
 		flex-direction: column;
-		margin-top: 50px;
-		height: 120px;
+		height: 100%;
 		justify-content: space-evenly;
 		align-items: center;
 	}
 	.buttons button {
 		background-color: rgb(83, 83, 83);
 		color: rgb(208, 208, 208);
-		width: 50%;
-		margin-top: 10px;
+		width: 100%;
+		margin-top: 15px;
 		border-radius: 10px;
 		font-size: 20px;
-		padding: 2px 0;
+		padding: 5px 10px;
 		cursor: pointer;
 	}
 	.buttons button:hover {
@@ -134,12 +135,14 @@
 		color: rgb(67, 67, 67);
 	}
 	.flag {
-		width: 300px;
-		height: 200px;
+		width: 25vw;
+		height: 35vh;
 		margin: auto;
 	}
 	.flag img {
-		width: 100%;
+		width: 80%;
 		height: 100%;
+		margin: auto;
+		border-radius: 10px;
 	}
 </style>

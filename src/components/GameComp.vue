@@ -1,7 +1,7 @@
 <template>
 	<start-page v-if="!isGameStarted" />
 	<question-comp v-if="isGameStarted && !isGameFinished.finished" />
-	<finish-game v-if="isGameStarted && isGameFinished.finished" />
+	<finish-game @restart="reset" v-if="isGameStarted && isGameFinished.finished" />
 </template>
 <script>
 	import QuestionComp from '@/components/QuestionComp.vue';
@@ -16,6 +16,7 @@
 		data() {
 			return {
 				isGameStarted: false,
+				resetGame: { reset: false },
 				isGameFinished: { finished: false },
 				userName: '',
 				score: { score: '' },
@@ -25,7 +26,9 @@
 			startGame(userName) {
 				this.userName = userName;
 				this.isGameStarted = true;
-				// alert('please write your name');
+			},
+			reset() {
+				this.isGameFinished.finished = false;
 			},
 		},
 		provide() {

@@ -1,7 +1,11 @@
 <template>
 	<div class="card">
 		<h2>Congratulations ! {{ userName }}</h2>
-		<h2>Your score {{ score.score }}</h2>
+		<h2>
+			Your score <span style="color: red">{{ score.score }}</span>
+		</h2>
+		//\\
+		<button @click="$emit('restart')">Play Again</button>
 	</div>
 </template>
 <script>
