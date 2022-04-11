@@ -27,11 +27,16 @@
 		},
 		methods: {
 			startGame(userName) {
+				if (!userName) {
+					alert('please write username');
+					return;
+				}
 				this.userName.userName = userName;
 				this.isGameStarted = true;
 			},
 			reset() {
 				this.isGameFinished.finished = false;
+				this.isGameStarted = false;
 			},
 		},
 		provide() {

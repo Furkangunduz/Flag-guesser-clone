@@ -2,10 +2,10 @@
 
 <template>
 	<div class="card">
-		<div v-if="score > 0" class="score">
+		<div v-if="score.score > 0" class="score">
 			<p>
 				Score :
-				<span style="color: darkcyan; font-size: 1.5rem">{{ score }}</span>
+				<span style="color: darkcyan; font-size: 1.5rem">{{ score.score }}</span>
 			</p>
 
 			<p>
@@ -38,7 +38,7 @@
 			return {
 				db: 'https://my-json-server.typicode.com/Furkangunduz/flag-guesser-clone/leaderBoard',
 				country: '',
-				index: 0,
+				index: 28,
 				img: '',
 				AnswersList: ['', '', '', ''],
 				answer: '',
@@ -49,13 +49,12 @@
 
 		created() {
 			this.nextQuestion();
-			this.score = 0;
+			this.score.score = 0;
 		},
 
 		methods: {
 			//call This after every choice and check answer
 			choose(ClickedButton) {
-				console.log(ClickedButton);
 				if (ClickedButton) {
 					let buttons = document.querySelectorAll('button');
 					let btnText = ClickedButton.target.outerText;
@@ -65,8 +64,7 @@
 					});
 					//if true make green button and wait for 1 sec
 					if (this.checkAnswer(btnText)) {
-						console.log(this.userName.userName);
-						this.score++;
+						this.score.score++;
 						ClickedButton.target.classList.add('true');
 						setTimeout(() => {
 							if (this.index < countries.length) {
@@ -153,14 +151,10 @@
 				}
 			},
 			AddLeaderBoardUser() {
-				let user = { 'username': this.userName.userName, 'score': this.score };
+				let user = { 'username': this.userName.userName, 'score': this.score.score };
 				axios.post(this.db, user)
-					.then((res) => {
-						console.log(res);
-					})
-					.catch((res) => {
-						console.log(res);
-					});
+					.then(() => {})
+					.catch(() => {});
 			},
 		},
 		// setVarForGame() {

@@ -31,7 +31,7 @@
 	export default {
 		data() {
 			return {
-				serName: '',
+				userName: '',
 				leaderBoard: [],
 				db: 'https://my-json-server.typicode.com/Furkangunduz/flag-guesser-clone/leaderBoard',
 			};
@@ -43,7 +43,6 @@
 		methods: {
 			getLeaderBoard() {
 				axios.get(this.db).then((res) => {
-					console.log(res.data);
 					this.leaderBoard = res.data;
 				});
 			},
