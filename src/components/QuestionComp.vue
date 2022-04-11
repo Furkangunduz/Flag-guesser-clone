@@ -38,7 +38,7 @@
 			return {
 				db: 'https://my-json-server.typicode.com/Furkangunduz/flag-guesser-clone/leaderBoard',
 				country: '',
-				index: 28,
+				index: 0,
 				img: '',
 				AnswersList: ['', '', '', ''],
 				answer: '',
@@ -49,6 +49,7 @@
 
 		created() {
 			this.nextQuestion();
+
 			this.score.score = 0;
 		},
 
