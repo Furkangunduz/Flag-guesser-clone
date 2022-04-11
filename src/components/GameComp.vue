@@ -20,14 +20,14 @@
 				isGameStarted: false,
 				resetGame: { reset: false },
 				isGameFinished: { finished: false },
-				userName: '',
-				score: { score: 0 },
+				userName: { userName: '' },
 				countriesLen: countries.length,
+				score: { score: 0 },
 			};
 		},
 		methods: {
 			startGame(userName) {
-				this.userName = userName;
+				this.userName.userName = userName;
 				this.isGameStarted = true;
 			},
 			reset() {
@@ -38,9 +38,9 @@
 			return {
 				startGame: this.startGame,
 				isGameFinished: this.isGameFinished,
-				score: this.score,
 				userName: this.userName,
 				countriesLen: this.countriesLen,
+				score: this.score,
 			};
 		},
 	};

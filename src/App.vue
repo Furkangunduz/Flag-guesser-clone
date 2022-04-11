@@ -1,3 +1,5 @@
+<!-- @format -->
+
 <template>
 	<div class="container">
 		<game-comp />

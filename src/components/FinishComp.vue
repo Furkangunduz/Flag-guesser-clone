@@ -1,8 +1,11 @@
+<!-- @format -->
+
 <template>
-	<div class="card">
-		<h2>Congratulations ! {{ userName }}</h2>
+	<div class="finishCard">
+		<h2>Congratulations ! {{ userName.userName }}</h2>
 		<h2>
-			Your score is <span style="color: red">{{ score.score }} / {{ countriesLen }}</span>
+			Your score is
+			<span style="color: red">{{ score.score }} / {{ countriesLen }}</span>
 		</h2>
 		//\\
 		<button @click="$emit('restart')">Play Again</button>
@@ -14,7 +17,7 @@
 	};
 </script>
 <style scoped>
-	.card {
+	.finishCard {
 		display: flex;
 		flex-direction: column;
 		align-items: center;

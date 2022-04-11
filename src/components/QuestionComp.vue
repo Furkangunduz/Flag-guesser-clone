@@ -1,14 +1,19 @@
+<!-- @format -->
+
 <template>
 	<div class="card">
-		<div v-if="score.score > 0" class="score">
+		<div v-if="score > 0" class="score">
 			<p>
-				Score : <span style="color: darkcyan; font-size: 1.5rem">{{ score.score }}</span>
+				Score :
+				<span style="color: darkcyan; font-size: 1.5rem">{{ score }}</span>
 			</p>
 
 			<p>
 				Left
-				<span style="color: darkcyan; font-size: 1.5rem"> {{ countriesLen - index }}</span> flag
-				!
+				<span style="color: darkcyan; font-size: 1.5rem">
+					{{ countriesLen - index + 1 }}</span
+				>
+				flag
 			</p>
 		</div>
 		<div class="flag">
@@ -24,8 +29,9 @@
 </template>
 
 <script>
-	import countries from '../../country_names';
+	/*eslint no-constant-condition: ["error", { "checkLoops": false }]*/
 
+	import countries from '../../country_names';
 	const axios = require('axios');
 	export default {
 		data() {
@@ -38,28 +44,18 @@
 				countriesLen: countries.length,
 			};
 		},
-		inject: ['isGameFinished', 'score'],
+		inject: ['isGameFinished', 'userName', 'score'],
 
 		created() {
 			this.nextQuestion();
-			this.score.score = 0;
+			this.score = 0;
 		},
 
 		methods: {
+			//call This after every choice and check answer
 			choose(ClickedButton) {
-				this.nextQuestion(ClickedButton);
-			},
-			nextQuestion(ClickedButton) {
-				if (this.index >= countries.length - 1) {
-					this.isGameFinished.finished = true;
-					return;
-				}
-				//first initilazied we dont have clicked button
-				//because of this call get data when start game
-				if (!ClickedButton) {
-					this.getData();
-					this.index++;
-				} else {
+				console.log(ClickedButton);
+				if (ClickedButton) {
 					let buttons = document.querySelectorAll('button');
 					let btnText = ClickedButton.target.outerText;
 					//disabled buttons till next question
@@ -68,18 +64,18 @@
 					});
 					//if true make green button and wait for 1 sec
 					if (this.checkAnswer(btnText)) {
-						this.score.score++;
+						console.log(this.userName.userName);
+						this.score++;
 						ClickedButton.target.classList.add('true');
 						setTimeout(() => {
-							if (this.index < countries.length - 1) {
-								this.getData();
-								this.index++;
+							if (this.index < countries.length) {
 								//enable buttons after 3 sec
 								buttons.forEach((button) => {
 									button.classList.remove('true');
 									button.classList.remove('false');
 									button.disabled = false;
 								});
+								this.nextQuestion();
 							}
 						}, 800);
 					}
@@ -92,29 +88,37 @@
 							}
 						});
 						setTimeout(() => {
-							if (this.index < countries.length - 1) {
-								this.getData();
-								this.index++;
+							if (this.index <= countries.length) {
 								//enable buttons after 3 sec
 								buttons.forEach((button) => {
 									button.classList.remove('true');
 									button.classList.remove('false');
 									button.disabled = false;
 								});
+								this.nextQuestion();
 							}
 						}, 1000);
 					}
 				}
+				if (this.index == countries.length) {
+					this.isGameFinished.finished = true;
+					this.AddLeaderBoardUser();
+				}
+			},
+			//get next question and increase index of question
+			nextQuestion() {
+				this.getData();
+				this.index++;
 			},
 			// get data from api with axios then set variables for questions
 			getData() {
-				axios
-					.get(`https://restcountries.com/v3.1/name/${countries[this.index]}`)
-					.then((res) => {
+				axios.get(`https://restcountries.com/v3.1/name/${countries[this.index]}`).then(
+					(res) => {
 						this.country = res.data[0].name.common;
 						this.img = res.data[0].flags['png'];
 						this.setAnswers();
-					});
+					}
+				);
 			},
 			//set 1 correct answer from question info and
 			//3 random answers from countries list
@@ -123,12 +127,16 @@
 				this.AnswersList[correctIndex] = this.country;
 				for (let i = 0; i < 4; i++) {
 					if (i != correctIndex) {
-						let answer = countries[Math.floor(Math.random() * 20)];
-						if (!this.AnswersList.some((i) => i == answer)) this.AnswersList[i] = answer;
+						let answer = countries[Math.floor(Math.random() * 30)];
+						if (!this.AnswersList.some((i) => i == answer))
+							this.AnswersList[i] = answer;
 						else {
-							let answer = countries[Math.floor(Math.random() * 20)];
-							while (!this.AnswersList.some((i) => i == answer)) {
-								this.AnswersList[i] = answer;
+							while (true) {
+								let answer = countries[Math.floor(Math.random() * 30)];
+								if (!this.AnswersList.some((i) => i == answer)) {
+									this.AnswersList[i] = answer;
+									break;
+								}
 							}
 						}
 					}
@@ -143,18 +151,27 @@
 					} else false;
 				}
 			},
-
-			// setVarForGame() {
-			// 	this.isGameFinished = false;
-			// 	this.questionInfo = {
-			// 		country: '',
-			// 		index: 0,
-			// 		img: '',
-			// 		score: '',
-			// 	};
-			// 	this.AnswersList = ['', '', '', ''];
-			// 	this.nextQuestion();
-			// },
+			AddLeaderBoardUser() {
+				let user = { 'username': this.userName.userName, 'score': this.score };
+				axios.post('http://localhost:3000/leaderBoard', user)
+					.then((res) => {
+						console.log(res);
+					})
+					.catch((res) => {
+						console.log(res);
+					});
+			},
 		},
+		// setVarForGame() {
+		// 	this.isGameFinished = false;
+		// 	this.questionInfo = {
+		// 		country: '',
+		// 		index: 0,
+		// 		img: '',
+		// 		score: '',
+		// 	};
+		// 	this.AnswersList = ['', '', '', ''];
+		// 	this.nextQuestion();
+		// },
 	};
 </script>
