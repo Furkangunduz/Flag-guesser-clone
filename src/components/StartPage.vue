@@ -33,6 +33,7 @@
 			return {
 				serName: '',
 				leaderBoard: [],
+				db: 'https://my-json-server.typicode.com/Furkangunduz/flag-guesser-clone/leaderBoard',
 			};
 		},
 		created() {
@@ -41,7 +42,7 @@
 		inject: ['startGame'],
 		methods: {
 			getLeaderBoard() {
-				axios.get('http://localhost:3000/leaderBoard').then((res) => {
+				axios.get(this.db).then((res) => {
 					console.log(res.data);
 					this.leaderBoard = res.data;
 				});

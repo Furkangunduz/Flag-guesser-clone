@@ -36,6 +36,7 @@
 	export default {
 		data() {
 			return {
+				db: 'https://my-json-server.typicode.com/Furkangunduz/flag-guesser-clone/leaderBoard',
 				country: '',
 				index: 0,
 				img: '',
@@ -153,7 +154,7 @@
 			},
 			AddLeaderBoardUser() {
 				let user = { 'username': this.userName.userName, 'score': this.score };
-				axios.post('http://localhost:3000/leaderBoard', user)
+				axios.post(this.db, user)
 					.then((res) => {
 						console.log(res);
 					})
